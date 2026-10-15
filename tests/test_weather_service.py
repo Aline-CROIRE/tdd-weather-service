@@ -66,11 +66,21 @@ def test_service_uses_injected_provider(mocker):
     mock_provider.get_forecast.assert_called_once_with("Kigali")
 
 
-def test_invalid_api_key_error_is_an_exception():
-    """Test the custom API key exception."""
-    error = InvalidAPIKeyError("Invalid API key")
+def test_valid_api_key_allows_forecast(provider):
+    """Test that a valid API key allows forecast retrieval."""
+    service = WeatherService(provider=provider, api_key="test-api-key")
 
-    assert str(error) == "Invalid API key"
+    forecast = service.get_forecast("Kigali")
+
+    assert forecast.city == "Kigali"
+
+
+def test_invalid_api_key_raises_error(provider):
+    """Test that an invalid API key is rejected."""
+    service = WeatherService(provider=provider, api_key="wrong-key")
+
+    with pytest.raises(InvalidAPIKeyError):
+        service.get_forecast("Kigali")
 
 
 def test_mock_provider_rejects_unknown_city():
@@ -93,3 +103,21 @@ def test_mock_provider_returns_kigali_forecast():
 
     assert forecast.city == "Kigali"
     assert forecast.condition == "Sunny"
+
+
+def test_successful_forecast_is_logged(service, caplog):
+    """Test that successful forecast requests are logged."""
+    with caplog.at_level("INFO"):
+        service.get_forecast("Kigali")
+
+    assert "Fetching forecast for city: Kigali" in caplog.text
+    assert "Forecast retrieved successfully for city: Kigali" in caplog.text
+
+
+def test_unknown_city_warning_is_logged(service, caplog):
+    """Test that unsupported cities produce a warning log."""
+    with caplog.at_level("WARNING"):
+        with pytest.raises(CityNotFoundError):
+            service.get_forecast("UnknownCity")
+
+    assert "Forecast requested for unsupported city: UnknownCity" in caplog.text
