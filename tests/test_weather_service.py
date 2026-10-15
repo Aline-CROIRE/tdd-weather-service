@@ -72,6 +72,7 @@ def test_invalid_api_key_error_is_an_exception():
 
     assert str(error) == "Invalid API key"
 
+
 def test_mock_provider_rejects_unknown_city():
     """Test that the mock provider rejects unsupported cities."""
     from weather_service.mock_provider import MockWeatherProvider

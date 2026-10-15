@@ -1,7 +1,7 @@
-
 """Provide weather forecast services."""
-from weather_service.models import Forecast
+
 from weather_service.mock_provider import MockWeatherProvider
+from weather_service.models import Forecast
 from weather_service.provider import WeatherProvider
 
 

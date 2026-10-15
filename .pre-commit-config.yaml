@@ -1,0 +1,21 @@
+
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: Black formatter check
+        entry: python -m black --check .
+        language: system
+        pass_filenames: false
+
+      - id: ruff
+        name: Ruff lint check
+        entry: python -m ruff check .
+        language: system
+        pass_filenames: false
+
+      - id: mypy
+        name: Mypy strict type check
+        entry: python -m mypy --strict weather_service
+        language: system
+        pass_filenames: false
