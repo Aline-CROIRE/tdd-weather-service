@@ -1,7 +1,7 @@
 
 import pytest
 
-from weather_service.exceptions import CityNotFoundError
+from weather_service.exceptions import CityNotFoundError, InvalidAPIKeyError
 from weather_service.service import WeatherService
 
 
@@ -37,3 +37,11 @@ def test_get_forecast_raises_error_for_unknown_city():
 
     with pytest.raises(CityNotFoundError):
         service.get_forecast("UnknownCity")
+
+
+
+
+def test_invalid_api_key_error_is_an_exception():
+    error = InvalidAPIKeyError("Invalid API key")
+
+    assert str(error) == "Invalid API key"
