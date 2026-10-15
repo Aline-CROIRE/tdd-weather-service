@@ -1,8 +1,8 @@
 """Provide predefined weather forecasts for testing."""
 
 from weather_service.exceptions import CityNotFoundError
-from weather_service.provider import WeatherProvider
 from weather_service.models import Forecast
+from weather_service.provider import WeatherProvider
 
 
 class MockWeatherProvider(WeatherProvider):

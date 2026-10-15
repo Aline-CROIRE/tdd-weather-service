@@ -1,3 +1,4 @@
+
 """Provide weather forecast services."""
 
 import logging
@@ -47,8 +48,5 @@ class WeatherService:
             )
             raise
 
-        logger.info(
-            "Forecast retrieved successfully for city: %s",
-            city,
-        )
+        logger.info("Forecast retrieved successfully for city: %s", city)
         return forecast
