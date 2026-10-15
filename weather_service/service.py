@@ -1,4 +1,3 @@
-
 """Provide weather forecast services."""
 
 import logging
@@ -21,9 +20,7 @@ class WeatherService:
             provider: Provider used to retrieve forecasts. Defaults to
                 MockWeatherProvider when no provider is supplied.
         """
-        self.provider = (
-            provider if provider is not None else MockWeatherProvider()
-        )
+        self.provider = provider if provider is not None else MockWeatherProvider()
 
     def get_forecast(self, city: str) -> Forecast:
         """Return a forecast for the requested city.
