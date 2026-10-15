@@ -3,6 +3,7 @@ import pytest
 
 from weather_service.exceptions import CityNotFoundError, InvalidAPIKeyError
 from weather_service.service import WeatherService
+from weather_service.models import Forecast
 
 
 def test_get_forecast_returns_kigali_forecast():
@@ -45,3 +46,19 @@ def test_invalid_api_key_error_is_an_exception():
     error = InvalidAPIKeyError("Invalid API key")
 
     assert str(error) == "Invalid API key"
+
+
+
+
+
+def test_service_uses_injected_provider():
+    class FakeProvider:
+        def get_forecast(self, city: str) -> Forecast:
+            return Forecast(city, "Rainy", 18)
+
+    service = WeatherService(provider=FakeProvider())
+
+    forecast = service.get_forecast("Kigali")
+
+    assert forecast.condition == "Rainy"
+    assert forecast.temperature_celsius == 18

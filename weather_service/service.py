@@ -1,55 +1,17 @@
 
 """Provide weather forecast services."""
-
-from dataclasses import dataclass
-
-from weather_service.exceptions import CityNotFoundError
-
-
-@dataclass(frozen=True)
-class Forecast:
-    """Represent a weather forecast.
-
-    Attributes:
-        city: Name of the city.
-        condition: Description of the weather.
-        temperature_celsius: Temperature in degrees Celsius.
-    """
-
-    city: str
-    condition: str
-    temperature_celsius: int
+from weather_service.models import Forecast
+from weather_service.mock_provider import MockWeatherProvider
+from weather_service.provider import WeatherProvider
 
 
 class WeatherService:
-    """Provide predefined weather forecasts."""
+    """Provide forecasts using an injected weather provider."""
 
-    FORECASTS = {
-        "Kigali": Forecast(
-            city="Kigali",
-            condition="Sunny",
-            temperature_celsius=25,
-        ),
-        "Nairobi": Forecast(
-            city="Nairobi",
-            condition="Cloudy",
-            temperature_celsius=20,
-        ),
-    }
+    def __init__(self, provider: WeatherProvider | None = None) -> None:
+        """Initialize the service with a provider."""
+        self.provider = provider or MockWeatherProvider()
 
     def get_forecast(self, city: str) -> Forecast:
-        """Return a forecast for a supported city.
-
-        Args:
-            city: Name of the requested city.
-
-        Returns:
-            The predefined forecast for the requested city.
-
-        Raises:
-            CityNotFoundError: If the city is not supported.
-        """
-        if city not in self.FORECASTS:
-            raise CityNotFoundError(f"City '{city}' was not found.")
-
-        return self.FORECASTS[city]
+        """Return a forecast using the configured provider."""
+        return self.provider.get_forecast(city)
